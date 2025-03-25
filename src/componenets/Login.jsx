@@ -3,6 +3,7 @@ import axios from "axios";
 import { addUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
 
 
 const Login = () => {
@@ -15,7 +16,7 @@ const Login = () => {
     e.preventDefault();  
   
     try {
-      const res = await axios.post("http://localhost:7777/login", {
+      const res = await axios.post(BASE_URL+"/login", {
         email: emailId,  
         password,
       },
