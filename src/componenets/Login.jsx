@@ -11,6 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate=useNavigate();
+  const [error, setError]=useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();  
@@ -26,6 +27,7 @@ const Login = () => {
       dispatch(addUser(res.data));
       return navigate("/"); 
     } catch (err) {
+      setError(err?.response?.data||"something went wrong");
       console.error("Login Failed:", err.response ? err.response.data : err.message);
     }
   };
@@ -106,11 +108,11 @@ const Login = () => {
               At least one number
               <br />
               At least one lowercase letter
-              <br />
+              <br />0000000000000000000000.
               At least one uppercase letter
             </p>
           </div>
-
+          <p className="text-red-500">{error}</p>
           <div className="card-actions justify-center">
             <button className="btn btn-primary " onClick={handleLogin}>Login</button>
           </div>
