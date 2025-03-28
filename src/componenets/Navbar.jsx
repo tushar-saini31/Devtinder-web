@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import axios from "axios";
 import { removeUser } from "../utils/userSlice";
-
+import { DEFAULT_PROFILE_PIC } from "../utils/constants";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
@@ -20,8 +20,7 @@ const Navbar = () => {
   };
 
   
-  const defaultProfileIcon =
-    "https://cdn-icons-png.flaticon.com/512/847/847969.png";
+ 
 
   return (
     <div className="navbar bg-base-100 shadow-sm flex justify-between px-4">
@@ -56,7 +55,7 @@ const Navbar = () => {
             <div className="w-10 rounded-full">
               <img
                 alt="User Profile"
-                src={user?.photoUrl || defaultProfileIcon} 
+                src={user?.photoUrl || DEFAULT_PROFILE_PIC } 
               />
             </div>
           </div>
