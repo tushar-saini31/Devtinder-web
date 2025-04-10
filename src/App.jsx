@@ -10,6 +10,7 @@ import appStore from './utils/appstore'
 import Feed from './componenets/Feed.jsx'
 import Connections from './componenets/Connections.jsx'
 import Requests from './componenets/Requests.jsx'
+import Shimmer from './componenets/Shimmer.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -24,6 +25,7 @@ function App() {
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/connections" element={<Connections/>}/>
           <Route path="/requests" element={<Requests/>}/>
+          <Route path="/shimmer-preview" element={<Shimmer />} />
       </Route>
     </Routes>
     </BrowserRouter>

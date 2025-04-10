@@ -33,14 +33,31 @@ const Body = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-grow">
-        <Navbar />
-        <Outlet />
-      </main>
+    <div className="relative min-h-screen">
+      {/* Background Image Layer */}
+      <div
+        className="absolute inset-0 bg-cover bg-center z-0"
+        style={{
+          backgroundImage: "url('https://gagadget.com/media/post_big/Tinder_Header.jpg')",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "top center",
+        }}
+      >
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black opacity-60"></div>
+      </div>
 
-      <Footer />
+      {/* Foreground Content */}
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <main className="flex-grow">
+          <Navbar />
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 };
+
 export default Body;

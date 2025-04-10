@@ -1,121 +1,133 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom"; // ✅ Import useLocation
 import axios from "axios";
 import { addUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 
-
 const Login = () => {
-  const [emailId, setEmailId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
-  const navigate=useNavigate();
-  const [error, setError]=useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [error, setError] = useState("");
+  const [isLoginForm, setIsLoginForm] = useState(true);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();  
-  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation(); // ✅ Get current route
+
+  const handleSignUp = async () => {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !password.trim()) {
+      setError("All fields are required.");
+      return;
+    }
+
     try {
-      const res = await axios.post(BASE_URL+"/login", {
-        email: emailId,  
-        password,
-      },
-    {withCredentials:true}
-  );
-      //console.log(res.data);
-      dispatch(addUser(res.data));
-      return navigate("/"); 
+      const res = await axios.post(
+        BASE_URL + "/signup",
+        { firstName, lastName, email, password },
+        { withCredentials: true }
+      );
+      dispatch(addUser(res.data.data));
+      navigate("/profile");
     } catch (err) {
-      setError(err?.response?.data||"something went wrong");
-      console.error("Login Failed:", err.response ? err.response.data : err.message);
+      setError(err.response?.data || "Something went wrong.");
     }
   };
-  
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Login Attempt");
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      setError("Email and password are required.");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        BASE_URL + "/login",
+        { email, password },
+        { withCredentials: true }
+      );
+      dispatch(addUser(res.data));
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data || "Invalid credentials.");
+    }
   };
+
   return (
-    <div className="flex justify-center my-10">
-      <div className="card card-border bg-base-300 w-96">
-        <div className="card-body">
-          <h2 className="card-title justify-center">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{
+        backgroundImage:
+          "url('https://cdn-ilajckf.nitrocdn.com/utLabjbGVjpaYDQkazoKnooguTzYeQRR/assets/images/optimized/rev-86d95f4/tamediacdn.techaheadcorp.com/wp-content/uploads/2022/02/16051143/MicrosoftTeams-image-38-1.png')",
+      }}>
+      <div className="flex justify-center my-10">
+        <div className="bg-gray-900/40 backdrop-blur-md shadow-lg border border-gray-700 p-8 rounded-xl w-96 text-center">
+          <h2 className="text-white text-2xl font-bold mb-4">{isLoginForm ? "Login" : "Sign Up"}</h2>
+
+          {!isLoginForm && (
+            <>
+              <div className="p-2">
+                <input
+                  type="text"
+                  required
+                  placeholder="First Name"
+                  className="w-full p-2 rounded bg-gray-800 text-white"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+              <div className="p-2">
+                <input
+                  type="text"
+                  required
+                  placeholder="Last Name"
+                  className="w-full p-2 rounded bg-gray-800 text-white"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+            </>
+          )}
+
           <div className="p-2">
-            <label className="input validator ">
-              <svg
-                className="h-[1em] opacity-50"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <g
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  strokeWidth="2.5"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                </g>
-              </svg>
-              <input type="email" value={emailId} placeholder="mail@site.com" required  onChange={(e)=>setEmailId(e.target.value)}/>
-            </label>
-            <div className="validator-hint hidden">
-              Enter valid email address
-            </div>
+            <input
+              type="email"
+              value={email}
+              placeholder="mail@site.com"
+              required
+              className="w-full p-2 rounded bg-gray-800 text-white"
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
-          
+
           <div className="p-2">
-            
-            <label className="input validator">
-              <svg
-                className="h-[1em] opacity-50"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <g
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  strokeWidth="2.5"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
-                  <circle
-                    cx="16.5"
-                    cy="7.5"
-                    r=".5"
-                    fill="currentColor"
-                  ></circle>
-                </g>
-              </svg>
-              <input
-                type="password"
-                value={password}
-                required
-                placeholder="Password"
-                minlength="8"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
-                onChange={(e)=>setPassword(e.target.value)}
-              />
-            </label>
-            <p className="validator-hint hidden">
-              Must be more than 8 characters, including
-              <br />
-              At least one number
-              <br />
-              At least one lowercase letter
-              <br />0000000000000000000000.
-              At least one uppercase letter
-            </p>
+            <input
+              type="password"
+              value={password}
+              required
+              placeholder="Password"
+              className="w-full p-2 rounded bg-gray-800 text-white"
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
-          <p className="text-red-500">{error}</p>
-          <div className="card-actions justify-center">
-            <button className="btn btn-primary " onClick={handleLogin}>Login</button>
+
+          {error && <p className="text-red-500">{error}</p>}
+
+          <div className="mt-4">
+            <button
+              className="w-40 p-2 bg-purple-600 text-white rounded-lg"
+              onClick={isLoginForm ? handleLogin : handleSignUp}
+            >
+              {isLoginForm ? "Login" : "Sign Up"}
+            </button>
           </div>
+
+          <p className="text-blue-400 cursor-pointer mt-2" onClick={() => setIsLoginForm(!isLoginForm)}>
+            {isLoginForm ? "Don't have an account yet?" : "Have an account already?"}
+          </p>
         </div>
       </div>
     </div>

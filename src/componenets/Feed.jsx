@@ -25,6 +25,11 @@ useEffect(()=>{
     getFeed();
 },[]);
 
+if(!feed)
+    return ;
+
+if(feed.length<=0)return <h1>No more User is found</h1>
+
 return (
 
      feed&&(

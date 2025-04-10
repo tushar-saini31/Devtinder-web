@@ -1,41 +1,39 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addUser } from "../utils/userSlice"; // Import Redux action
+import { addUser } from "../utils/userSlice";
 import UserCard from "./UserCard";
 import { BASE_URL } from "../utils/constants";
 import axios from "axios";
 
-const EditProfile = ({ user }) => {
-  const dispatch = useDispatch(); // Initialize Redux dispatch
+const EditProfile = ({ user = {} }) => {
+  const dispatch = useDispatch();
 
-  // Local state for form fields
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [age, setAge] = useState("");
-  const [about, setAbout] = useState("");
-  const [gender, setGender] = useState("");
-  const [photoUrl, setPhotoUrl] = useState("");
+  // Ensure `user` is never undefined
+  const [firstName, setFirstName] = useState(user?.firstName || "");
+  const [lastName, setLastName] = useState(user?.lastName || "");
+  const [age, setAge] = useState(user?.age ?? "");
+  const [about, setAbout] = useState(user?.about || "");
+  const [gender, setGender] = useState(user?.gender || "");
+  const [photoUrl, setPhotoUrl] = useState(user?.photoUrl || "");
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
 
-  // Update local state when `user` prop changes
   useEffect(() => {
     if (user) {
       setFirstName(user.firstName || "");
       setLastName(user.lastName || "");
-      setAge(user.age || "");
+      setAge(user.age ?? "");
       setAbout(user.about || "");
       setGender(user.gender || "");
       setPhotoUrl(user.photoUrl || "");
     }
   }, [user]);
 
-  // Handle form submission
   const saveProfile = async () => {
-    setError(""); // Clear error
+    setError("");
     try {
       const res = await axios.patch(
-        BASE_URL + "/profile/edit",
+        `${BASE_URL}/profile/edit`,
         { firstName, lastName, photoUrl, age, gender, about },
         { withCredentials: true }
       );
@@ -43,22 +41,23 @@ const EditProfile = ({ user }) => {
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
+      console.error("Profile update failed:", err);
       setError(err.message);
     }
   };
 
   return (
     <div>
-      {/* Updated flex container for responsive layout */}
-      <div className="flex justify-center items-center h-screenr gap-10">
-        {/* Edit Profile Card */}
-        <div className="card card-border bg-base-300 w-96">
+<div
+  className="min-h-screen bg-cover bg-center flex justify-center items-center "
+  style={{
+    backgroundImage: "url('https://nordicapis.com/wp-content/uploads/Case-Study-Lessons-Learned-Making-the-Tinder-API-Gateway-1024x576.png')",
+  }}
+>        <div className="card card-border bg-gradient-to-r from-gray-200 to-gray-500 w-96   p-2 mt-15">
           <div className="card-body">
-            <h2 className="card-title justify-center">Edit Profile</h2>
-
-            {/* Input fields */}
+            <h2 className="card-title justify-center ">Edit Profile</h2>
             <div>
-              <p className="flex justify-start">First Name:</p>
+              <p className="flex justify-start text-gray-700">First Name:</p>
               <label className="input validator">
                 <input
                   type="text"
@@ -70,7 +69,7 @@ const EditProfile = ({ user }) => {
               </label>
             </div>
             <div>
-              <p className="flex justify-start">Last Name:</p>
+              <p className="flex justify-start text-gray-700">Last Name:</p>
               <label className="input validator">
                 <input
                   type="text"
@@ -82,19 +81,19 @@ const EditProfile = ({ user }) => {
               </label>
             </div>
             <div>
-              <p className="flex justify-start">Age:</p>
+              <p className="flex justify-start text-gray-700">Age:</p>
               <label className="input validator">
                 <input
                   type="number"
                   required
                   placeholder="Age"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
+                  value={age || ""}
+                  onChange={(e) => setAge(Number(e.target.value) || "")}
                 />
               </label>
             </div>
             <div>
-              <p className="flex justify-start">Gender:</p>
+              <p className="flex justify-start text-gray-700">Gender:</p>
               <label className="input validator">
                 <input
                   type="text"
@@ -106,7 +105,7 @@ const EditProfile = ({ user }) => {
               </label>
             </div>
             <div>
-              <p className="flex justify-start">Photo URL:</p>
+              <p className="flex justify-start text-gray-700">Photo URL:</p>
               <label className="input validator">
                 <input
                   type="text"
@@ -118,7 +117,7 @@ const EditProfile = ({ user }) => {
               </label>
             </div>
             <div>
-              <p className="flex justify-start">About You:</p>
+              <p className="flex justify-start text-gray-700">About You:</p>
               <fieldset className="fieldset">
                 <textarea
                   className="textarea h-24"
@@ -126,14 +125,10 @@ const EditProfile = ({ user }) => {
                   value={about}
                   onChange={(e) => setAbout(e.target.value)}
                 ></textarea>
-                <div className="fieldset-label">Optional</div>
+                <div className="fieldset-label text-gray-700">Optional</div>
               </fieldset>
             </div>
-
-            {/* Error Message */}
             <p className="text-red-500">{error}</p>
-
-            {/* Save Button */}
             <div className="card-actions justify-center">
               <button className="btn btn-primary" onClick={saveProfile}>
                 Save Profile
@@ -141,16 +136,12 @@ const EditProfile = ({ user }) => {
             </div>
           </div>
         </div>
-
-        {/* User Card - Displays Updated Details */}
         <UserCard user={{ firstName, lastName, gender, age, photoUrl, about }} />
       </div>
-
-      {/* Toast Notification */}
       {showToast && (
-        <div className="toast toast-top toast-center">
-          <div className="alert alert-success">
-            <span className="text-gray-900">Profile saved successfully.</span>
+        <div className="toast toast-top toast-center p-20">
+          <div className="alert alert-success bg-green-400">
+            <span className="text-white">Profile saved successfully.</span>
           </div>
         </div>
       )}
