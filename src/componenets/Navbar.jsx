@@ -71,6 +71,9 @@ const Navbar = () => {
                   <Link to="/requests">Requests</Link>
                 </li>
                 <li>
+                  <Link to="/Premium">Premium</Link>
+                </li>
+                <li>
                   <a
                     onClick={() => {
                       dispatch(removeUser());

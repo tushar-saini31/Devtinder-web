@@ -3,7 +3,7 @@ import { BASE_URL, DEFAULT_USER_PIC } from "../utils/constants";
 import axios from "axios";
 import { addConnections } from "../utils/ConnectionSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Shimmer from "./Shimmer";
 
 const Connections = () => {
@@ -62,7 +62,7 @@ const Connections = () => {
           "url('https://www-cms.pipedriveassets.com/blog-assets/manage-your-dating-pipeline.png')",
       }}
     >
-      <div className="bg-opacity-50 backdrop-blur-md   w-[90%] max-w-xl shadow-xl">
+      <div className="bg-opacity-50 backdrop-blur-md w-[90%] max-w-xl shadow-xl">
         <h1 className="font-bold text-3xl text-white mb-6 text-center">Connections</h1>
 
         {/* Scrollable Wrapper */}
@@ -91,6 +91,9 @@ const Connections = () => {
                   )}
                   <p className="text-white/80 text-sm">{about || "No bio available."}</p>
                 </div>
+                <Link to={"/chat/" + _id} className="ml-auto">
+                  <button className="btn btn-primary">Message</button>
+                </Link>
               </div>
             );
           })}

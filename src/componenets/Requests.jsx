@@ -72,7 +72,7 @@ const Requests = () => {
       <div className="text-center mb-8">
         <h1 className="font-bold text-3xl text-white mt-10">Users Requests</h1>
       </div>
-    <div className="h-[300px] overflow-y-auto space-y-4 pr-2 scrollbar-hide">
+    <div className="h-[550px] overflow-y-auto space-y-4 pr-2 scrollbar-hide">
       {request.map((req) => {
         const { _id, firstName, lastName, photoUrl, age, gender, about } =
           req.fromUserId;
